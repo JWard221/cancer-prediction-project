@@ -83,3 +83,4 @@ final.influencers <- Reduce(intersect, list(rows.ov,rows.cov,hat.true))
 final.influencers
 
 # When we build models we can be sure to be on the lookout for these values
+# "29"   "51"   "439"  "543"  "649"  "777"  "925"  "990"  "998"  "1073" "1297" "1718" "1720" "2113" "2129"
