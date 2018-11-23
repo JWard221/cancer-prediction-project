@@ -1,0 +1,68 @@
+---
+title: "cancer_data_plots"
+author: "Arnab Sarkar(as3uj)"
+date: "23/11/2018"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+load("D:/Courses/STAT 6021 Fall 2018/Project/Repository/cancer-prediction-project/train_v2.RData")
+load("D:/Courses/STAT 6021 Fall 2018/Project/Repository/cancer-prediction-project/test_v2.RData")
+attach(train)
+```
+
+Getting summary of all columns for the cancer train data-
+```{r}
+summary(train)
+```
+
+
+```{r}
+pairs(~TARGET_deathRate+medIncome+povertyPercent,data=train)
+```
+target death rate appears to fall in a curvilinear manner with increase in median income (include:Yes?)
+target death rate increases(slightly) linearly with povertyPercent (include:Yes?)
+
+```{r}
+plot(popEst2015,TARGET_deathRate)
+```
+There does not seem to be conclusive relationship between Population of County and death rate.(include:No)
+
+```{r}
+plot(studyPerCap,TARGET_deathRate)
+```
+No conclusive pattern between death rate and Per capita number of cancer-related clinical trials.(include:No)
+
+```{r}
+par(mar=c(8,5,1,1))
+boxplot(TARGET_deathRate~binnedInc,data=train, main="MedInc boxplots",
+    ylab="death rate",las=2)
+```
+Death rate decreases with increase in median Income bracket. (include:Yes)
+
+```{r}
+pairs(~TARGET_deathRate+MedianAge+MedianAgeMale+MedianAgeFemale,data=train)
+```
+
+There appear to be lot incorrect/extreme values for MedianAge(>300).Correcting these would generate
+a better plot.
+Death rate does not have any conclusive relationship with MedianAgeMale. (include:No?) 
+Death rate does not have any conclusive relationship with MedianAgeFeMale. (include:No?)
+
+```{r}
+plot(MedianAge,TARGET_deathRate,xlim=c(0,100))
+```
+death rate does not seem to have any relationship with MedianAge(after limiting x to 100) (include:No?)
+
+```{r}
+pairs(~TARGET_deathRate+AvgHouseholdSize+PercentMarried,data=train)
+```
+
+There does not seem to be apparent relationship between AvgHouseholdSize and death rate.Also some obs have AvgHouseholdSize set as 0. (include:No)
+There appears to be a very slight decrease in death rate with PercentMarried. (include:Yes?)
+
+```{r}
+pairs(~TARGET_deathRate+PctNoHS18_24+PctHS18_24+PctSomeCol18_24+PctBachDeg18_24,data=train)
+```
+
