@@ -36,7 +36,7 @@ No conclusive pattern between death rate and Per capita number of cancer-related
 
 ```{r}
 par(mar=c(8,5,1,1))
-boxplot(TARGET_deathRate~binnedInc,data=train, main="MedInc boxplots",
+boxplot(TARGET_deathRate~binnedInc,data=train, main="Median Income bracket boxplots",
     ylab="death rate",las=2)
 ```
 Death rate decreases with increase in median Income bracket. (include:Yes)
@@ -66,3 +66,102 @@ There appears to be a very slight decrease in death rate with PercentMarried. (i
 pairs(~TARGET_deathRate+PctNoHS18_24+PctHS18_24+PctSomeCol18_24+PctBachDeg18_24,data=train)
 ```
 
+None of the four 18-24 age group variables show any distinct pattern w.r.t death rate.
+
+Let's try converting these 4 into a single categorical variable depending on majority percentage-
+```{r}
+train$maj18_24<-NA
+```
+
+
+```{r}
+train[which(train$PctNoHS18_24>=train$PctHS18_24&train$PctNoHS18_24>=train$PctSomeCol18_24&train$PctNoHS18_24>=train$PctBachDeg18_24),'maj18_24']<-'PctNoHS18_24'
+train[which(train$PctHS18_24>=train$PctNoHS18_24&train$PctHS18_24>=train$PctSomeCol18_24&train$PctHS18_24>=train$PctBachDeg18_24),'maj18_24']<-'PctHS18_24'
+train[which(train$PctSomeCol18_24>=train$PctNoHS18_24&train$PctSomeCol18_24>=train$PctHS18_24&train$PctSomeCol18_24>=train$PctBachDeg18_24),'maj18_24']<-'PctSomeCol18_24'
+train[which(train$PctBachDeg18_24>=train$PctNoHS18_24&train$PctBachDeg18_24>=train$PctHS18_24&train$PctBachDeg18_24>=train$PctSomeCol18_24),'maj18_24']<-'PctBachDeg18_24'
+```
+
+Converting to factor and plotting as boxplots
+```{r}
+par(mar=c(9,5,1,1))
+train$maj18_24<-as.factor(train$maj18_24)
+boxplot(TARGET_deathRate~maj18_24,data=train, main="maj18_24 boxplots",
+    ylab="death rate",las=2)
+```
+
+There does not seem to much variation between the categories of maj18_24.
+
+```{r}
+pairs(~TARGET_deathRate+PctHS25_Over+PctBachDeg25_Over,data=train)
+```
+
+There seems to be slight increase in death rate with higher percentage of 25 and over HS graduate(include:yes?)
+There is a curvilinear relationship(decreasing) between deathrate and percentage over 25 with bachelor degree.(include:yes)
+
+```{r}
+pairs(~TARGET_deathRate+PctEmployed16_Over+PctUnemployed16_Over,data=train)
+```
+
+death rate appears to have linear relationship with both 16 over variables.
+It decreases slightly with increase in PctEmployed16_Over (Include:Yes?)
+Increases slightly with increase in PctUnemployed16_Over (Include:Yes).
+
+```{r}
+pairs(~TARGET_deathRate+PctPrivateCoverage+PctPrivateCoverageAlone+PctPublicCoverage+PctPublicCoverageAlone,data=train)
+```
+
+There appears to be linear relationship with private coverage variables and deathrate as well as between
+public coverage and deathrate. (Include all: Yes?)
+Not sure if above 4 variables can be combined in a meaningful manner(as they may have overlap)
+
+The private employer coverage(PctEmpPrivCoverage.greater.than.mean) can be represented as boxplots
+```{r}
+par(mar=c(9,5,1,1))
+boxplot(TARGET_deathRate~PctEmpPrivCoverage.greater.than.mean,data=train, main="employer private coverage boxplots",
+    ylab="death rate",las=2)
+```
+
+People without employer private coverage seem to have a higher death rate, though spread seems to be same. (include: Yes?)
+
+```{r}
+pairs(~TARGET_deathRate+PctWhite+PctBlack+PctAsian+PctOtherRace,data=train)
+```
+
+There seems to no trend visible between death rate and race (Include:No?)
+
+We can try combining the 4 variables into a single variable for majority race in county,
+however asians and other race percentages are very small and dont cross even 40%.We can
+combine the percentages of asians with other races-
+
+```{r}
+train$maj_race<-NA
+train[which(train$PctWhite>=train$PctBlack&train$PctWhite>=(train$PctAsian+train$PctOtherRace)),'maj_race']<-'White'
+train[which(train$PctBlack>=train$PctWhite&train$PctBlack>=(train$PctAsian+train$PctOtherRace)),'maj_race']<-'Black'
+train[which((train$PctAsian+train$PctOtherRace)>=train$PctWhite&(train$PctAsian+train$PctOtherRace)>=train$PctBlack),'maj_race']<-'Other'
+
+train$maj_race<-as.factor(train$maj_race)
+
+par(mar=c(9,5,1,1))
+boxplot(TARGET_deathRate~maj_race,data=train, main="Race demographic boxplots",
+    ylab="death rate",las=2)
+```
+
+Above box plot shows that counties with majority black population have higher cancer death rate,
+compared to white or others(least death rate due to cancer)
+However be wary of the fact that most counties have majority white population and for them there
+is still a lot of variation(though middle 50% of white counties appear to have death rate somewhere
+in between the median black and median other death rates)
+
+
+```{r}
+plot(PctMarriedHouseholds,TARGET_deathRate)
+plot(PercentMarried,TARGET_deathRate)
+plot(PercentMarried,PctMarriedHouseholds)
+```
+Plotting PctMarriedHouseholds against deathrate shows marginal decrease with increase in PctMarriedHousehold.(Include:Yes?)
+Comparing with PercentMarried variable which was explored earlier,both have similar relationship with deathrate and we may find both these variables to be co-linear(see plot 3 above) as well(may have to drop one)
+
+```{r}
+plot(BirthRate,TARGET_deathRate)
+```
+Birthrate of county shows no apparent relationship to cancer death rate. (Include: No)
