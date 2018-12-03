@@ -182,7 +182,7 @@ summary(death.lm.forw)
 
 
 #######################
-# Stepwise selection
+# Stepwise regression
 #######################
 
 death.lm.step = stepwise.selection(alpha.in, alpha.out, resp.name, reg.names, data.name)
