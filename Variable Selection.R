@@ -163,7 +163,7 @@ summary(full.lm)
 #######################
 
 resp.name <- "TARGET_deathRate"
-reg.names <- names(df[names(df) != 'TARGET_deathRate'])
+reg.names <- names(df)[-which(names(df) %in% c('incidenceRate', 'avgAnnCount', 'avgDeathsPerYear', 'TARGET_deathRate'))]
 data.name <- "df"
 alpha.out <- 0.10
 
@@ -182,7 +182,7 @@ summary(death.lm.forw)
 
 
 #######################
-# Stepwise selection
+# Stepwise regression
 #######################
 
 death.lm.step = stepwise.selection(alpha.in, alpha.out, resp.name, reg.names, data.name)
@@ -209,12 +209,12 @@ summary(death.lm.forw)$adj.r.squared
 summary(death.lm.step)$adj.r.squared
 
 
-# We choose to drop PctWhite and PctOtherRace from our list of
-# variables because PctWhite didn't perform quite so well in 
+# We choose to drop PctBlack and PctOtherRace from our list of
+# variables because PctBlack didn't perform quite so well in 
 # some of our stepwise models, and we think that basing a prediction
 # on a regressor representing "otherness" is dangerous and likely
 # to lead to errors on unseen data.
-names.overlap = names.overlap[! names.overlap %in% c('PctWhite', 'PctOtherRace')]
+names.overlap = names.overlap[! names.overlap %in% c('PctBlack', 'PctOtherRace')]
 
 
 ##################################################
@@ -252,19 +252,31 @@ dimnames(disp.submod) <- list(NULL, col.names)
 cbind(summary(df.vs)$coefficients, disp.submod)
 
 
-# We look at the statistics and see that we prefer the model with
-# all 13 variables but could accept models with 11, 8, and 7 variables as well.
+# We look at the statistics and see that we prefer the models with
+# 4, 5, 6, and 10 variables
 
 # So we store the names of the variable for each model
 # for ease of use in other scripts
-names13.tf = df.subsets$which[13,-1]
-names13 = names(which(names13.tf))
+names10.tf = df.subsets$which[10,-1]
+names10 = names(which(names10.tf))
+names10
+# [1] "PercentMarried"         "PctHS25_Over"           "PctBachDeg25_Over"      "PctEmployed16_Over"     "PctUnemployed16_Over"  
+# [6] "PctPrivateCoverage"     "PctPublicCoverage"      "PctPublicCoverageAlone" "PctMarriedHouseholds"   "BirthRate"  
 
-names11.tf = df.subsets$which[11,-1]
-names11 = names(which(names11.tf))
 
-names8.tf = df.subsets$which[8,-1]
-names8 = names(which(names8.tf))
+names6.tf = df.subsets$which[6,-1]
+names6 = names(which(names6.tf))
+names6
+# [1] "MedianAgeFemale"      "PctHS25_Over"         "PctBachDeg25_Over"    "PctUnemployed16_Over" "PctMarriedHouseholds"
+# [6] "BirthRate"  
 
-names7.tf =df.subsets$which[7,-1]
-names7 = names(which(names7.tf))
+
+names5.tf = df.subsets$which[5,-1]
+names5 = names(which(names5.tf))
+names5
+# [1] "PctHS25_Over"         "PctBachDeg25_Over"    "PctUnemployed16_Over" "PctMarriedHouseholds" "BirthRate"    
+
+names4.tf =df.subsets$which[4,-1]
+names4 = names(which(names4.tf))
+names4
+# [1] "PctHS25_Over"         "PctBachDeg25_Over"    "PctUnemployed16_Over" "PctMarriedHouseholds"
