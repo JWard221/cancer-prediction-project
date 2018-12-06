@@ -1,11 +1,12 @@
 # Multiple Linear Regression Challenge - County Cancer Data
-Background
+
+# Background
 
 These data were aggregated from a number of sources including the American Community Survey (census.gov), clinicaltrials.gov, and cancer.gov. Most of the data preparation process can be veiwed here.
 Your Task: Build a multivariate Ordinary Least Squares regression model to predict "TARGET_deathRate"
 Deliverables
 
-Data Dictionary
+# Data Dictionary
 
 TARGET_deathRate: Dependent variable. Mean per capita (100,000) cancer mortalities(a)
 
