@@ -5,29 +5,6 @@ These data were aggregated from a number of sources including the American Commu
 Your Task: Build a multivariate Ordinary Least Squares regression model to predict "TARGET_deathRate"
 Deliverables
 
-a. Your final model equation
-
-b. The statistical software output including (adjusted) R-squared and Root Mean Squared Error (RMSE)
-
-c. Your code file (if you used a programming language)
-
-d. Model diagnostics including statistics and visualizations:
-
-- Assess linearity of model (parameters)
-- Assess serial independence of errors
-- Assess heteroskedasticity
-- Assess normality of residual distribution
-- Assess multicollinearity
-
-e. Your interpretation of the model
-
-f. Other factors to consider:
-
-- Are there any outliers?
-- Are there missing values?
-- How will you handle categorical variables?
-
-Good Luck and Have Fun!
 Data Dictionary
 
 TARGET_deathRate: Dependent variable. Mean per capita (100,000) cancer mortalities(a)
